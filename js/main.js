@@ -26,17 +26,17 @@
 		var makeCell = function( rowId ) {
 			$('.row').eq(rowId).append('<div class="cell" data-x="'+$('.cell').length%NUM_COLS+'"></div>')
 		};
-		var walkIt = function ( x, y, from='' ) {
+		var walkIt = function ( x, y, fromDirection='' ) {
 			var on_solution_path = false;
+			var nexts = [];
 			if( !stuck(x,y) ) {
-				var nexts = [];
-				while( !nexts.length ) {
-					nexts = scramble(pickIfPassable(1,x,y)); // build more as it gets denser
-				}
-				on_solution_path = branch(x,y,nexts) || madeIt(x,y);
-				if(on_solution_path) { cellAt(x,y).addClass('hilit'); }
-				if(x===START_X && y===START_Y) { cellAt(x,y).addClass('start').html('Start'); }
+				var nexts = scramble(pickIfPassable(1,x,y));				
 			}
+			for( var direction in nexts ) {
+				on_solution_path = on_solution_path || branchTo(x,y,nexts[direction]) || madeIt(x,y);	
+			}
+			if(on_solution_path) { cellAt(x,y).addClass('hilit'); }
+			if(x===START_X && y===START_Y) { cellAt(x,y).addClass('start').html('Start'); }
 			return on_solution_path;
 		};
 		// private
@@ -97,17 +97,28 @@
 						}
 			return ratio.num / ratio.denom;
 		};
+		// not used:
 		var branch = function( x,y,paths ) {
 			return paths.reduce( function branching( accum, curVal, curIdx ){
-				connectTwoCells( x, y, curVal );
 				if( madeIt(x,y) ) {
 					cellAt(x,y).addClass('finish').html('End');
 				}
-				return accum || madeIt( x, y ) || walkIt( x, y );
+				var coords = xyInDirection(x,y,curVal);
+				connectTwoCells( x,y,curVal );
+				return accum || madeIt( x, y ) || walkIt( coords.x, coords.y, opposite(curVal) );
 			}, false );
 		};
-		var connectTwoCells( x, y, direction ) {
-			var coords = xyInDirection(x,y,curVal);
+		var branchTo = function( x,y,direction ) {
+			if( madeIt(x,y) ) {
+				cellAt(x,y).addClass('finish').html('End');
+			}
+			var coords = xyInDirection(x,y,direction);
+			connectTwoCells( x,y,direction );
+			return madeIt( x, y ) || walkIt( coords.x, coords.y, opposite(direction) );
+		};
+		var connectTwoCells = function( x, y, direction ) {
+			if( !direction ) { return; }
+			var coords = xyInDirection(x,y,direction);
 			if( !notPassableCoords(coords.x,coords.y) ) {
 				cellAt(x,y).addClass(direction);
 				cellAt(coords.x,coords.y).addClass(opposite(direction));
