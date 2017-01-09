@@ -1,0 +1,45 @@
+
+body {
+	font-family: sans-serif;
+}
+.row {
+	clear: both;
+	display: block;
+	float: left;
+}
+.cell {
+	display: inline;
+	float: left;
+	height: 40px;
+	width: 40px;
+	border: 1px solid black;
+}
+.cell.n {
+	border-top-color: white;
+}
+.cell.s {
+	border-bottom-color: white;
+}
+.cell.e {
+	border-right-color: white;
+}
+.cell.w {
+	border-left-color: white;
+}
+.hilit {
+	background-color: pink;
+}
+.start, .hilit.start {
+	background-color: green;
+}
+.finish, .hilit.finish {
+	background-color: red;
+}
+/* Media Queries */
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
