@@ -26,12 +26,12 @@
 		var makeCell = function( rowId ) {
 			$('.row').eq(rowId).append('<div class="cell" data-x="'+$('.cell').length%NUM_COLS+'"></div>')
 		};
-		var walkIt = function ( x, y ) {
+		var walkIt = function ( x, y, from='' ) {
 			var on_solution_path = false;
 			if( !stuck(x,y) ) {
 				var nexts = [];
 				while( !nexts.length ) {
-					nexts = pickIfPassable(density()+.1,x,y); // build more as it gets denser
+					nexts = scramble(pickIfPassable(1,x,y)); // build more as it gets denser
 				}
 				on_solution_path = branch(x,y,nexts) || madeIt(x,y);
 				if(on_solution_path) { cellAt(x,y).addClass('hilit'); }
@@ -84,6 +84,11 @@
 				}
 			}, [] );
 		};
+		var scramble = function( arr ) {
+			return arr.reduce( function beforeOrAfter( accum, curVal, curIdx ){
+				return Math.random() < .5 ? accum + curVal : curVal + accum;
+			},[]).split('');
+		};
 		var density = function() {
 			var ratio = { denom: $('.cell').length,
 						  num: $('.cell').filter(function addUsedCells( curIdx, curVal ){
@@ -91,19 +96,22 @@
 						  }).length
 						}
 			return ratio.num / ratio.denom;
-		}
+		};
 		var branch = function( x,y,paths ) {
 			return paths.reduce( function branching( accum, curVal, curIdx ){
-				var coords = xyInDirection(x,y,curVal);
-				if( !notPassableCoords(coords.x,coords.y) ) {
-					cellAt(x,y).addClass(curVal);
-					cellAt(coords.x,coords.y).addClass(opposite(curVal));
+				connectTwoCells( x, y, curVal );
+				if( madeIt(x,y) ) {
+					cellAt(x,y).addClass('finish').html('End');
 				}
-				if( madeIt(coords.x,coords.y) ) {
-					cellAt(coords.x,coords.y).addClass('finish').html('End');
-				}
-				return accum || madeIt( coords.x, coords.y ) || walkIt( coords.x, coords.y );
+				return accum || madeIt( x, y ) || walkIt( x, y );
 			}, false );
+		};
+		var connectTwoCells( x, y, direction ) {
+			var coords = xyInDirection(x,y,curVal);
+			if( !notPassableCoords(coords.x,coords.y) ) {
+				cellAt(x,y).addClass(direction);
+				cellAt(coords.x,coords.y).addClass(opposite(direction));
+			}
 		}
 		// interface
 		var _handle = {
