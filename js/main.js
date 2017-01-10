@@ -109,12 +109,12 @@
 			}, false );
 		};
 		var branchTo = function( x,y,direction ) {
-			if( madeIt(x,y) ) {
-				cellAt(x,y).addClass('finish').html('End');
-			}
-			var coords = xyInDirection(x,y,direction);
 			connectTwoCells( x,y,direction );
-			return madeIt( x, y ) || walkIt( coords.x, coords.y, opposite(direction) );
+			var coords = xyInDirection( x,y,direction );
+			if( madeIt( coords.x, coords.y ) ) {
+				cellAt( coords.x, coords.y ).addClass('finish').html('End');
+			}
+			return madeIt( coords.x, coords.y ) || walkIt( coords.x, coords.y, opposite(direction) );
 		};
 		var connectTwoCells = function( x, y, direction ) {
 			if( !direction ) { return; }
