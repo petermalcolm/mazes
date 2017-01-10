@@ -33,7 +33,7 @@
 				var nexts = scramble(pickIfPassable(1,x,y));				
 			}
 			for( var direction in nexts ) {
-				on_solution_path = on_solution_path || branchTo(x,y,nexts[direction]) || madeIt(x,y);	
+				on_solution_path = branchTo(x,y,nexts[direction]) || on_solution_path || madeIt(x,y);	
 			}
 			if(on_solution_path) { cellAt(x,y).addClass('hilit'); }
 			if(x===START_X && y===START_Y) { cellAt(x,y).addClass('start').html('Start'); }
