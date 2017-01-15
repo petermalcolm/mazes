@@ -8,16 +8,16 @@
 	const NUM_COLS = 16;
 	const NUM_ROWS = 10;
 
-	const START_X = 8;
-	const START_Y = 9;
+	const START_X = 0;
+	const START_Y = 0;
 
-	const END_X = 8;
-	const END_Y = 0;
+	const END_X = 15;
+	const END_Y = 9;
 
 	const deltas =[ {dir: 'n', del: { x: 0, y: -1 }, weight: 1, opposite: 's'},
-					{dir: 's', del: { x: 0, y:  1 }, weight: 0, opposite: 'n'},
-					{dir: 'e', del: { x: 1, y:  0 }, weight: .3, opposite: 'w'},
-					{dir: 'w', del: { x:-1, y:  0 }, weight: .3, opposite: 'e'}
+					{dir: 's', del: { x: 0, y:  1 }, weight: 1, opposite: 'n'},
+					{dir: 'e', del: { x: 1, y:  0 }, weight: 1, opposite: 'w'},
+					{dir: 'w', del: { x:-1, y:  0 }, weight: 1, opposite: 'e'}
 				  ];
 	var main = function() {
 		var makeRow = function() {
@@ -70,8 +70,8 @@
 			return !pickIfPassable(1,x,y).length;
 		};
 		var madeIt = function( x, y ) {
-			// return (x===END_X && y===END_Y);
-			return notPassableCoords( x,y-1 );
+			return (x===END_X && y===END_Y);
+			// return notPassableCoords( x,y-1 );
 		};
 		var pickIfPassable = function( likelihood, x, y ) {
 			return deltas.reduce( function picking( accum, curVal, curIdx ){
