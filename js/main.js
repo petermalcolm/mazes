@@ -103,17 +103,6 @@
 						}
 			return ratio.num / ratio.denom;
 		};
-		// not used:
-		var branch = function( x,y,paths ) {
-			return paths.reduce( function branching( accum, curVal, curIdx ){
-				if( madeIt(x,y) ) {
-					cellAt(x,y).addClass('finish').html('End');
-				}
-				var coords = xyInDirection(x,y,curVal);
-				connectTwoCells( x,y,curVal );
-				return accum || madeIt( x, y ) || walkIt( coords.x, coords.y, opposite(curVal) );
-			}, false );
-		};
 		var branchTo = function( x,y,direction ) {
 			connectTwoCells( x,y,direction );
 			var coords = xyInDirection( x,y,direction );
