@@ -105,6 +105,7 @@
 		};
 		var branchTo = function( x,y,direction ) {
 			connectTwoCells( x,y,direction );
+			connectTwoCells( NUM_COLS-x-1,y,mirror('x',direction) );
 			var coords = xyInDirection( x,y,direction );
 			if( (coords.x===END_X && coords.y===END_Y) ) {
 				cellAt( coords.x, coords.y ).addClass('finish').html('End');
@@ -118,6 +119,15 @@
 				cellAt(x,y).addClass(direction);
 				cellAt(coords.x,coords.y).addClass(opposite(direction));
 			}
+		};
+		var mirror = function( across, direction ) {
+			if('x'===across && ('w'===direction || 'e'===direction)) {
+				return deltaOf(direction).opposite;
+			}
+			if('y'===across && ('n'===direction || 's'===direction)) {
+				return deltaOf(direction).opposite;
+			}			
+			return direction;
 		}
 		// interface
 		var _handle = {
