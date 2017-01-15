@@ -5,14 +5,14 @@
 'use strict';
 
 (function iife($){
-	const NUM_COLS = 15;
+	const NUM_COLS = 16;
 	const NUM_ROWS = 10;
 
-	const START_X = 0
-	const START_Y = 0
+	const START_X = 8;
+	const START_Y = 9;
 
-	const END_X = 14;
-	const END_Y = 9;
+	const END_X = 8;
+	const END_Y = 0;
 
 	const deltas =[ {dir: 'n', del: { x: 0, y: -1 }, opposite: 's'},
 					{dir: 's', del: { x: 0, y:  1 }, opposite: 'n'},
@@ -70,14 +70,15 @@
 			return !pickIfPassable(1,x,y).length;
 		};
 		var madeIt = function( x, y ) {
-			return (x===END_X && y===END_Y);
+			// return (x===END_X && y===END_Y);
+			return notPassableCoords( x,y-1 );
 		};
 		var pickIfPassable = function( likelihood, x, y ) {
 			return deltas.reduce( function picking( accum, curVal, curIdx ){
 				var direction = curVal.dir,
 					newX = x+curVal.del.x,
 					newY = y+curVal.del.y;
-				if(Math.random() < likelihood && !notPassableCoords(newX,newY)) { 
+				if('s' !== curVal.dir && Math.random() < likelihood && !notPassableCoords(newX,newY)) { 
 					return accum.concat(direction);
 				} else {
 					return accum;
@@ -86,7 +87,7 @@
 		};
 		var scramble = function( arr ) {
 			return arr.reduce( function beforeOrAfter( accum, curVal, curIdx ){
-				return Math.random() < .5 ? accum + curVal : curVal + accum;
+				return (Math.random() < .5) ? accum + curVal : curVal + accum;
 			},[]).split('');
 		};
 		var density = function() {
@@ -112,9 +113,9 @@
 			connectTwoCells( x,y,direction );
 			var coords = xyInDirection( x,y,direction );
 			if( madeIt( coords.x, coords.y ) ) {
-				cellAt( coords.x, coords.y ).addClass('finish').html('End');
+				// cellAt( coords.x, coords.y ).addClass('finish').html('End');
 			}
-			return madeIt( coords.x, coords.y ) || walkIt( coords.x, coords.y, opposite(direction) );
+			return madeIt( coords.x, coords.y ) || walkIt( coords.x, coords.y );
 		};
 		var connectTwoCells = function( x, y, direction ) {
 			if( !direction ) { return; }
