@@ -5,14 +5,14 @@
 'use strict';
 
 (function iife($){
-	const NUM_COLS = 32;
+	const NUM_COLS = 55;
 	const NUM_ROWS = 20;
 
-	const START_X = 0;
+	const START_X = 10;
 	const START_Y = 0;
 
-	const END_X = 15;
-	const END_Y = 9;
+	const END_X = 16;
+	const END_Y = 19;
 
 	const deltas =[ {dir: 'n', del: { x: 0, y: -1 }, weight: 1, opposite: 's'},
 					{dir: 's', del: { x: 0, y:  1 }, weight: 1, opposite: 'n'},
@@ -64,7 +64,8 @@
 					c.hasClass('n') || 
 					c.hasClass('s') || 
 					c.hasClass('e') || 
-					c.hasClass('w');
+					c.hasClass('w') ||
+					c.hasClass('x'); // x for impassable
 		}
 		var stuck = function( x, y ) {
 			return !pickIfPassable(1,x,y).length;
@@ -147,6 +148,11 @@
 			y: $(e.target).closest('.row').attr('data-y')
 		};
 		console.log( hitCoords );
-		maze.walkIt( parseInt(hitCoords.x), parseInt(hitCoords.y) );
+		// maze.walkIt( parseInt(hitCoords.x), parseInt(hitCoords.y) );
+		maze.cellAt( parseInt(hitCoords.x), parseInt(hitCoords.y) ).toggleClass('x').toggleClass('no-print');
+		maze.cellAt( NUM_COLS - parseInt(hitCoords.x), parseInt(hitCoords.y) ).toggleClass('x').toggleClass('no-print');
 	});
+	$('h1').on('click',function(e){
+		maze.walkIt( START_X, START_Y );
+	})
 }(jQuery));

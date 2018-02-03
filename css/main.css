@@ -26,6 +26,9 @@ body {
 .cell.w {
 	border-left-color: white;
 }
+.cell.x {
+	background-color: black;
+}
 .hilit {
 	background-color: pink;
 }
@@ -40,6 +43,7 @@ body {
 {    
     .no-print, .no-print *
     {
-        display: none !important;
+/*         display: none !important; */
+/*        visibility: hidden !important; */
     }
 }
