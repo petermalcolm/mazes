@@ -5,8 +5,8 @@
 'use strict';
 
 (function iife($){
-	const NUM_COLS = 16;
-	const NUM_ROWS = 10;
+	const NUM_COLS = 32;
+	const NUM_ROWS = 20;
 
 	const START_X = 0;
 	const START_Y = 0;
@@ -139,7 +139,7 @@
 	}
 
 	// walk it!
-	maze.walkIt( START_X, START_Y );
+	// maze.walkIt( START_X, START_Y );
 	// flesh it out
 	$('.cell').on('click',function(e){
 		var hitCoords = {
